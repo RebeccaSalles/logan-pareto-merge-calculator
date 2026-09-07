@@ -1,0 +1,6 @@
+query_file	source_fna	record_id	start	end	length_bp	window_complexity_3mer_count	n_fraction
+wheat/query_examples/query_1.fa	wheat/ble_caroline_pont/data/my-genomes/ncbi_dataset/data/GCA_038442765.1/GCA_038442765.1_ASM3844276v1_genomic.fna.gz	CP142758.1	1682781	1687780	5000	64	0.0000
+wheat/query_examples/query_2.fa	wheat/ble_caroline_pont/data/my-genomes/ncbi_dataset/data/GCA_051168695.1/GCA_051168695.1_HAU_Langdon_genomic.fna.gz	CM118260.1	1913799	1918798	5000	64	0.0000
+wheat/query_examples/query_3.fa	wheat/ble_caroline_pont/data/my-genomes/ncbi_dataset/data/GCA_034509565.1/GCA_034509565.1_PI306540_Tmono_genomic.fna.gz	CM067841.1	1250316	1255315	5000	64	0.0000
+wheat/query_examples/query_4.fa	wheat/ble_caroline_pont/data/my-genomes/ncbi_dataset/data/GCA_051171255.1/GCA_051171255.1_ASM5117125v1_genomic.fna.gz	CM118876.1	266511	271510	5000	64	0.0000
+wheat/query_examples/query_5.fa	wheat/ble_caroline_pont/data/my-genomes/ncbi_dataset/data/GCA_903993985.1/GCA_903993985.1_10wheat_assembly_arinaLrFor_genomic.fna.gz	LR862550.1	1685893	1690892	5000	64	0.0000
