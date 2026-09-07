@@ -8,7 +8,7 @@ via [kmhelpers](https://github.com/sebllns/kmhelpers)) merges small per-span sub
 
 What you can do on the page:
 
-- Get a recommended (base, groups) design for a query length and storage budget, picked from 502 real candidate designs — no index built to check it.
+- Get a recommended (base, groups) design for a query length and storage budget: the tool plots the real storage-vs-speed Pareto curve across 502 candidate designs and picks the fastest one on it that fits your budget — no index built to check it.
 - Test the underlying cost formula's own assumptions (partition size, rounding, caps) live, right in the browser.
 - See how storage and query cost move with groups and base, across both the span≤20 and full-Logan corpora.
 - Read the model itself and how it holds up against a real 16-config measurement campaign.
