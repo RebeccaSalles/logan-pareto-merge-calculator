@@ -4,13 +4,13 @@ An interactive tool for choosing how [Logan Search](https://github.com/IndexTheP
 Bloom-filter index (built with [kmindex](https://github.com/tlemane/kmindex)/[kmtricks](https://github.com/tlemane/kmtricks)
 via [kmhelpers](https://github.com/sebllns/kmhelpers)) merges small per-span sub-indexes.
 
-**[Open the calculator →](https://RebeccaSalles.github.io/logan-pareto-merge-calculator/)**
+**[Open the calculator tool →](https://RebeccaSalles.github.io/logan-pareto-merge-calculator/)**
 
 What you can do on the page:
 
 - Get a recommended (base, groups) design for a query length and storage budget: the tool plots the real storage-vs-speed Pareto curve across 502 candidate designs and picks the fastest one on it that fits your budget — no index built to check it.
 - Test the underlying cost formula's own assumptions (partition size, rounding, caps) live, right in the browser.
-- See how storage and query cost move with groups and base, across both the span≤20 and full-Logan corpora.
+- See how storage and query cost move with groups and base, across both the span≤20 and full-Logan corpus.
 - Read the model itself and how it holds up against a real 16-config measurement campaign.
 
 ## What's here
