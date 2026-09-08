@@ -225,6 +225,34 @@
   </div>
 
   <div class="calc-panel" style="margin-top:22px;">
+    <h4>Test the nb_partitions formula</h4>
+    <div class="sub">Every constant below (4GB per partition, the power-of-2 rounding, the 4&ndash;256 caps) is a real, checkable assumption rather than a derived one &mdash; explanation of the formula is in the next section. Change any of them, and the chart and trend charts recompute live from the same real per-group storage data &mdash; no need to re-run kmhelpers. Score is only comparable <em>within one formula setting</em>, though: a smaller number after a tweak doesn't mean &ldquo;better,&rdquo; just a different scale. What actually matters is whether the ranking or the recommended design changes.</div>
+    <div class="callout amber" style="margin:12px 0;font-size:.86rem;" id="fx-mhint"></div>
+    <div class="fx-grid">
+      <label class="fx-field">GB per partition
+        <input type="number" id="fx-partbytes" value="4" min="0.01" step="0.5">
+      </label>
+      <label class="fx-field">Min partitions/group
+        <input type="number" id="fx-minp" value="4" min="1" step="1">
+      </label>
+      <label class="fx-field">Max partitions/group
+        <input type="number" id="fx-maxp" value="256" min="1" step="1">
+      </label>
+      <label class="fx-field">Rounding
+        <select id="fx-rounding">
+          <option value="pow2" selected>power of 2 (shipped)</option>
+          <option value="ceil">ceiling, no pow-of-2</option>
+          <option value="nearest">nearest integer</option>
+        </select>
+      </label>
+    </div>
+    <div class="fx-actions">
+      <button type="button" class="fx-reset" id="fx-reset">Reset to shipped defaults</button>
+    </div>
+    <div class="callout teal" id="fx-readout" style="margin-top:16px;"></div>
+  </div>
+
+  <div class="calc-panel" style="margin-top:22px;">
     <h4>Storage budget</h4>
     <div class="sub" id="calc-budget-sub"></div>
     <div class="budget-input"><input type="range" id="calc-budget" min="772" max="6940" value="2000" step="1"><span class="bval" id="calc-budget-val">2.00 TB</span></div>
@@ -303,34 +331,6 @@
   <span class="c1">return</span> designs, frontier   <span class="cm"># -&gt; drives the interactive calculator above</span></div>
 
   <p class="dek" style="margin-top:20px;">Base affects the score too, through partition count: a higher base merges wider span ranges into each group, which raises its storage and, with it, its partition count. Across the 250 candidates that range runs from 4 to 256 &mdash; it isn't fixed. At training scale (Validation, below) groups stay small enough to sit near the floor of 4, which is why base's effect doesn't show up there. Whether it shows up as a measured full-corpus query-time difference is still an open question (Status, below).</p>
-
-  <div class="calc-panel" style="margin-top:28px;">
-    <h4>Test the nb_partitions formula</h4>
-    <div class="sub">Every constant below (4GB per partition, the power-of-2 rounding, the 4&ndash;256 caps) is a real, checkable assumption rather than a derived one. Change any of them, and the calculator and trend charts above recompute live from the same real per-group storage data &mdash; no need to re-run kmhelpers. Score is only comparable <em>within one formula setting</em>, though: a smaller number after a tweak doesn't mean &ldquo;better,&rdquo; just a different scale. What actually matters is whether the ranking or the recommended design changes.</div>
-    <div class="callout amber" style="margin:12px 0;font-size:.86rem;" id="fx-mhint"></div>
-    <div class="fx-grid">
-      <label class="fx-field">GB per partition
-        <input type="number" id="fx-partbytes" value="4" min="0.01" step="0.5">
-      </label>
-      <label class="fx-field">Min partitions/group
-        <input type="number" id="fx-minp" value="4" min="1" step="1">
-      </label>
-      <label class="fx-field">Max partitions/group
-        <input type="number" id="fx-maxp" value="256" min="1" step="1">
-      </label>
-      <label class="fx-field">Rounding
-        <select id="fx-rounding">
-          <option value="pow2" selected>power of 2 (shipped)</option>
-          <option value="ceil">ceiling, no pow-of-2</option>
-          <option value="nearest">nearest integer</option>
-        </select>
-      </label>
-    </div>
-    <div class="fx-actions">
-      <button type="button" class="fx-reset" id="fx-reset">Reset to shipped defaults</button>
-    </div>
-    <div class="callout teal" id="fx-readout" style="margin-top:16px;"></div>
-  </div>
 </section>
 
 <!-- ============ TRENDS ============ -->
@@ -769,7 +769,7 @@
     var selLive = findById(curScope, selId), selShip = null;
     for (var i=0;i<ship.length;i++){ if (ship[i].id===selId){ selShip = ship[i]; break; } }
     var selNote = (selLive && selShip)
-      ? ' The stat cards above show <b>'+selId+'</b>: its score'+curLen+' is '+selLive[selKey]+(selLive[selKey]===selShip[selKey] ? ' (unchanged from shipped, even if other designs moved).' : ' (shipped: '+selShip[selKey]+').')
+      ? ' The stat cards below show <b>'+selId+'</b>: its score'+curLen+' is '+selLive[selKey]+(selLive[selKey]===selShip[selKey] ? ' (unchanged from shipped, even if other designs moved).' : ' (shipped: '+selShip[selKey]+').')
       : '';
 
     document.getElementById('fx-readout').innerHTML =
