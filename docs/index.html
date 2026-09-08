@@ -225,8 +225,27 @@
   </div>
 
   <div class="calc-panel" style="margin-top:22px;">
+    <h4>Storage budget</h4>
+    <div class="sub" id="calc-budget-sub"></div>
+    <div class="budget-input"><input type="range" id="calc-budget" min="772" max="6940" value="2000" step="1"><span class="bval" id="calc-budget-val">2.00 TB</span></div>
+    <div id="calc-rec-badge"></div>
+  </div>
+
+  <div class="stat-grid" style="margin-top:14px;">
+    <div class="stat-card"><div class="n" id="calc-id">&mdash;</div><div class="l">selected config</div></div>
+    <div class="stat-card"><div class="n" id="calc-base">&mdash;</div><div class="l">base</div></div>
+    <div class="stat-card"><div class="n" id="calc-groups">&mdash;</div><div class="l">groups</div></div>
+    <div class="stat-card"><div class="n" id="calc-storage">&mdash;</div><div class="l">storage</div></div>
+    <div class="stat-card"><div class="n" id="calc-maxgroup">&mdash;</div><div class="l">largest group</div></div>
+    <div class="stat-card"><div class="n" id="calc-nprange">&mdash;</div><div class="l">partitions/group</div></div>
+    <div class="stat-card"><div class="n" id="calc-score">&mdash;</div><div class="l">cost score</div></div>
+    <div class="stat-card"><div class="n" id="calc-rel">&mdash;</div><div class="l">query cost, relative to fastest</div></div>
+  </div>
+  <p style="font-size:.82rem;color:var(--ink-faint);margin-top:10px;" id="calc-caption"></p>
+
+  <div class="calc-panel" style="margin-top:28px;">
     <h4>Test the nb_partitions formula</h4>
-    <div class="sub">Every constant below (4GB per partition, the power-of-2 rounding, the 4&ndash;256 caps) is a real, checkable assumption rather than a derived one &mdash; explanation of the formula is in the next section. Change any of them, and the chart and trend charts recompute live from the same real per-group storage data &mdash; no need to re-run kmhelpers. Score is only comparable <em>within one formula setting</em>, though: a smaller number after a tweak doesn't mean &ldquo;better,&rdquo; just a different scale. What actually matters is whether the ranking or the recommended design changes.</div>
+    <div class="sub"><strong>Full explanation of the formula is in the next section, <a href="#algorithm">How It Works</a>.</strong> Every constant below (4GB per partition, the power-of-2 rounding, the 4&ndash;256 caps) is a real, checkable assumption, not a derived one. Change any of them, and the chart and trend charts recompute live from the same real per-group storage data &mdash; no need to re-run kmhelpers. Score is only comparable <em>within one formula setting</em>, though: a smaller number after a tweak doesn't mean &ldquo;better,&rdquo; just a different scale. What actually matters is whether the ranking or the recommended design changes.</div>
     <div class="callout amber" style="margin:12px 0;font-size:.86rem;" id="fx-mhint"></div>
     <div class="fx-grid">
       <label class="fx-field">GB per partition
@@ -251,25 +270,6 @@
     </div>
     <div class="callout teal" id="fx-readout" style="margin-top:16px;"></div>
   </div>
-
-  <div class="calc-panel" style="margin-top:22px;">
-    <h4>Storage budget</h4>
-    <div class="sub" id="calc-budget-sub"></div>
-    <div class="budget-input"><input type="range" id="calc-budget" min="772" max="6940" value="2000" step="1"><span class="bval" id="calc-budget-val">2.00 TB</span></div>
-    <div id="calc-rec-badge"></div>
-  </div>
-
-  <div class="stat-grid" style="margin-top:14px;">
-    <div class="stat-card"><div class="n" id="calc-id">&mdash;</div><div class="l">selected config</div></div>
-    <div class="stat-card"><div class="n" id="calc-base">&mdash;</div><div class="l">base</div></div>
-    <div class="stat-card"><div class="n" id="calc-groups">&mdash;</div><div class="l">groups</div></div>
-    <div class="stat-card"><div class="n" id="calc-storage">&mdash;</div><div class="l">storage</div></div>
-    <div class="stat-card"><div class="n" id="calc-maxgroup">&mdash;</div><div class="l">largest group</div></div>
-    <div class="stat-card"><div class="n" id="calc-nprange">&mdash;</div><div class="l">partitions/group</div></div>
-    <div class="stat-card"><div class="n" id="calc-score">&mdash;</div><div class="l">cost score</div></div>
-    <div class="stat-card"><div class="n" id="calc-rel">&mdash;</div><div class="l">query cost, relative to fastest</div></div>
-  </div>
-  <p style="font-size:.82rem;color:var(--ink-faint);margin-top:10px;" id="calc-caption"></p>
 </section>
 
 <!-- ============ ALGORITHM ============ -->
@@ -556,7 +556,7 @@
     document.getElementById('calc-maxgroup').textContent=fmtGB(d.m);
     document.getElementById('calc-nprange').textContent=(d.np_min===d.np_max)?d.np_min:(d.np_min+'–'+d.np_max);
     document.getElementById('calc-score').textContent=d[svg._key];
-    document.getElementById('calc-rel').textContent=d._rel.toFixed(2)+'× fastest';
+    document.getElementById('calc-rel').textContent=d._rel<=1.001 ? 'fastest option' : (d._rel.toFixed(2)+'× slower');
   }
 
   var budgetInput=document.getElementById('calc-budget');
@@ -769,7 +769,7 @@
     var selLive = findById(curScope, selId), selShip = null;
     for (var i=0;i<ship.length;i++){ if (ship[i].id===selId){ selShip = ship[i]; break; } }
     var selNote = (selLive && selShip)
-      ? ' The stat cards below show <b>'+selId+'</b>: its score'+curLen+' is '+selLive[selKey]+(selLive[selKey]===selShip[selKey] ? ' (unchanged from shipped, even if other designs moved).' : ' (shipped: '+selShip[selKey]+').')
+      ? ' The stat cards above show <b>'+selId+'</b>: its score'+curLen+' is '+selLive[selKey]+(selLive[selKey]===selShip[selKey] ? ' (unchanged from shipped, even if other designs moved).' : ' (shipped: '+selShip[selKey]+').')
       : '';
 
     document.getElementById('fx-readout').innerHTML =
