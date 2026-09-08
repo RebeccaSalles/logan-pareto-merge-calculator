@@ -370,7 +370,7 @@
 <section class="rsec" id="validation">
   <div class="sec-eyebrow">How the calculator was checked</div>
   <h2>The Training Campaign</h2>
-  <p class="dek">Building and querying a full index is expensive: at the measured production rate (40 threads, 0.13328&nbsp;seconds/sample), one full 7.15M-accession build takes on the order of <b>11 days</b>. So the first check ran on a 60,000-sample subsample instead, where all 16 configurations together finished in about <b>1.5 days</b> of cluster time. <b>Everything in this section is span&le;20 only.</b> Full Logan, the calculator and trends' other option, hasn't been built or queried for real at any scale yet.</p>
+  <p class="dek">Building and querying a full index is expensive: at the measured production rate (40 threads, 0.13328&nbsp;seconds/sample), one full 7.15M-accession build takes on the order of <b>11 days</b>. So the first check ran on a seeded, random 60,000-accession subsample of that same 7.15M-accession span&le;20 corpus instead: 16 configurations spanning base 1.05&ndash;2.0 and 2&ndash;249 groups (6.55&ndash;21.4GB total storage at this scale), finishing in about <b>1.5 days</b> of cluster time altogether. Query times are cold-cache: each config was queried with 5 real positive-control substrings drawn from the Logan corpus itself per length, 3 repeats each, first (cold) repeat reported. <b>Everything in this section is span&le;20 only.</b> Full Logan, the calculator and trends' other option, hasn't been built or queried for real at any scale yet.</p>
 
   <div class="stat-grid">
     <div class="stat-card"><div class="n">16</div><div class="l">configs built &amp; queried</div></div>
